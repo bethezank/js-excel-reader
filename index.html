@@ -1,0 +1,49 @@
+<!-- 
+    https://www.npmjs.com/package/xlsx
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script lang="javascript" src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+
+<body>
+    <div>
+        <input type="file" id="input" />
+    </div>
+    <script>
+        var input = document.getElementById('input')
+
+        input.addEventListener('change', function (e) {
+
+            const file = e.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+
+                // Read the first sheet
+                const firstSheetName = workbook.SheetNames[5];
+                const worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON
+                const sheetData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+                // Log the contents
+                console.log(sheetData);
+            };
+
+            reader.readAsArrayBuffer(file);
+
+        })
+
+    </script>
+</body>
+
+</html>
